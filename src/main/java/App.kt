@@ -1,29 +1,17 @@
-import akka.actor.AbstractActor
 import akka.actor.ActorRef
-import akka.actor.ActorSystem
-import akka.actor.Props
+import core.remote
+import core.system
+import core.MqttActor
 
-
-internal class PrintActor : AbstractActor() {
-    override fun createReceive(): Receive {
-        return receiveBuilder()
-                .matchEquals("printit") { p ->
-                }
-                .build()
-    }
-}
 
 object Klient {
     @Throws(java.io.IOException::class)
     @JvmStatic
     fun main(args: Array<String>) {
-        val system = ActorSystem.create("testSystem")
-
-        val printActor = system.actorOf(Props.create(PrintActor::class.java), "first-actor")
-        println("First: " + printActor)
-        printActor.tell("printit", ActorRef.noSender())
-
+        remote.tell(MqttActor.Message(MqttActor.Message.Type.ALIVE, mapOf(1 to 1)), ActorRef.noSender())
+        System.`in`.read()
         system.terminate()
+        System.`in`.read()
         System.exit(0)
     }
 }
