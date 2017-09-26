@@ -31,6 +31,7 @@ class MqttActor: VerboseActor() {
 
             override fun connectionLost(cause: Throwable?) {
                 log.error("Connection Lost by ${cause.toString()}")
+                client.reconnect()
             }
 
             override fun deliveryComplete(token: IMqttDeliveryToken?) {
